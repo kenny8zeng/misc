@@ -1,0 +1,23 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.hudplay.remoter.service">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <service
+            android:name=".RemoterService"
+            android:enabled="true"
+            android:exported="true"
+            android:priority="1000">
+            <intent-filter>
+                <action android:name="cn.hudplay.remoter.service.start.action" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
