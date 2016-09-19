@@ -209,8 +209,8 @@ namespace nsHudplay
 			fd_set rfds;
 
 			struct timeval tv = {
-				.tv_sec = timeout / 1000000,
-				.tv_usec = timeout % 1000000,
+				.tv_sec  = static_cast<time_t>( timeout / 1000000 ),
+				.tv_usec = static_cast<time_t>( timeout % 1000000 ),
 			};
 
 			FD_ZERO( &rfds );
