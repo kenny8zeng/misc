@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+
     compileSdkVersion 21
     buildToolsVersion "23.0.3"
 
@@ -8,13 +9,52 @@ android {
         applicationId "cn.hudplay.remoter.service"
         minSdkVersion 17
         targetSdkVersion 23
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
     }
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("./src/main/keypair/appKey.jks")
+            storePassword "nihao18yue"
+            keyAlias "appkey"
+            keyPassword "nihao18yue"
+
+        }
+        relealse {
+            storeFile file("./src/main/keypair/appKey.jks")
+            storePassword "nihao18yue"
+            keyAlias "appkey"
+            keyPassword "nihao18yue"
+        }
+    }
+
     buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources false
+            proguardFiles 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            minifyEnabled true
+            zipAlignEnabled true
+            shrinkResources false
+            proguardFiles 'proguard-rules.pro'
+            signingConfig signingConfigs.relealse
         }
     }
 }
