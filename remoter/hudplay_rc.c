@@ -16,29 +16,37 @@ static ssize_t set_rc( struct device *dev, struct device_attribute *attr,
 		const char *buffer, size_t count )
 {
 	unsigned long evt = 0;
-	int active, scan, key;
+	int active, scan, key, index;
 
-	evt = simple_strtoul( buffer, NULL, 0 );
-
-	if( evt )
+	for( index = 0; index < count; ++index )
 	{
-		active = (evt & 0xff000000)? 1 : 0;
-		scan   = ( evt >> 00 )& 0xfff;
-		key    = ( evt >> 12 )& 0xfff;
+		if( buffer[index] == 'x' && index != 0 && count - index >= 8 )
+		{
+			evt = simple_strtoul( buffer + index - 1, NULL, 0 );
 
-		input_event( rc_input_dev, EV_MSC, MSC_SCAN, scan );
-		input_event( rc_input_dev, EV_KEY, key, active );
-		input_sync( rc_input_dev );
+			if( evt )
+			{
+				active = (evt & 0xff000000)? 1 : 0;
+				scan   = ( evt >> 00 )& 0xfff;
+				key    = ( evt >> 12 )& 0xfff;
 
-		printk( KERN_DEBUG LOGTAG "%s: key %s %x\n", __func__,
-				(active)? "down" : "up", scan );
+				input_event( rc_input_dev, EV_MSC, MSC_SCAN, scan );
+				input_event( rc_input_dev, EV_KEY, key, active );
+				input_sync( rc_input_dev );
+
+				printk( KERN_DEBUG LOGTAG "%s: key %s 0x%x\n", __func__,
+						(active)? "down" : "up", scan );
+			}
+
+			index += 8;
+		}
 	}
 
 	return count;
 }
 
 //----------------------------------------------------------------------------------------
-DEVICE_ATTR(rc, 0644, NULL, set_rc );
+DEVICE_ATTR(rc, 0666, NULL, set_rc );
 
 static struct attribute *attrs[] = { &dev_attr_rc.attr, NULL };
 static struct attribute_group rc_attr_group = { .attrs = attrs, };

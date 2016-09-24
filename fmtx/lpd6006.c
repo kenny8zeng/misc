@@ -323,6 +323,11 @@ int fm_reset(struct fm_io_t * io, uint4_t val)
 	rbs = &bit_setting[ emREG_IDX_RESET ];
 	ERR_RETURN( _fm_set( io, rbs->addr, rbs->mask, rbs->value ) );
 
-	return fm_initial( io );
+	ERR_RETURN( fm_initial( io ) );
+
+	if( val > 0 ) ERR_RETURN( fm_txpwr( io, 0x3f ) );
+	if( val > 1 ) ERR_RETURN( fm_freq( io, 10800 ) );
+
+	return 0;
 }
 

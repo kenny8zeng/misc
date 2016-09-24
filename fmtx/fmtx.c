@@ -234,7 +234,11 @@ static int fmtx_fm_write(struct fm_io_t* io, addr_t addr, reg_t  val )
 static ssize_t set_config_reset(struct device *dev, struct device_attribute *attr,
 		const char *buf, size_t count )
 {
-	if( 0 != fm_reset( &(gdev->io), 0 ) )
+	int ret = 0;
+
+	ret = simple_strtol( buf, NULL, 0 );
+
+	if( 0 != fm_reset( &(gdev->io), ret ) )
 	{
 		printk( KERN_ERR LOGTAG_FMTX "%s error fm_reset\n", __func__ );
 
