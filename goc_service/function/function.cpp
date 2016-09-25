@@ -16,7 +16,7 @@ namespace nsHudplay
 	};
 
 	//------------------------------------------------------------------------------------
-	bool tservice::send( const std::string& command )
+	bool tservice::send( const tcommand& command )
 	{
 		return false;
 	}
