@@ -507,7 +507,13 @@ static int fmtx_probe(struct i2c_client *client, const struct i2c_device_id *id)
 		goto err_fs;
 	}
 
-	ret = fm_detect( &(dev->io) );
+	ret = 0;
+
+	if( 0 != fm_detect( &(dev->io) ) && 0 != fm_detect( &(dev->io) ) ) 
+	{
+		ret = fm_detect( &(dev->io) );
+	}
+
 	if( ret != 0 ) {
 		printk( KERN_ERR  LOGTAG_FMTX "%s : fm_detect detect failed, ret:%x\n", __func__, ret );
 		goto err_fm_detect;
